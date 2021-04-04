@@ -40,10 +40,10 @@ namespace SquareGrid
     public readonly struct Coordinate : IEquatable<Coordinate>
     {
         /// <summary> The X value of this point in 2-D space. </summary>
-        public int X { get; }
+        public readonly int X;
 
         /// <summary> The Y value of this point in 2-D space. </summary>
-        public int Y { get; }
+        public readonly int Y;
 
 
         /// <summary> Creates a new <see cref="Coordinate"/> struct with the given [x] and [y] values. </summary>
@@ -61,6 +61,8 @@ namespace SquareGrid
         /// <summary> Returns a new <see cref="Coordinate"/> struct with values (1, 1). </summary>
         public static Coordinate One => new Coordinate(1, 1);
 
+        /// <summary> Returns a <see cref="Tuple"/> representation of this <see cref="Coordinate"/>. </summary>
+        public (int X, int Y) AsTuple => (X, Y);
 
         /// <summary> Method whose purpose is to resolve diagonal <see cref="Direction"/> values into orthogonal values. </summary>
         /// <param name="input"> The given <see cref="Direction"/> to resolve into an orthogonal direction. </param>
