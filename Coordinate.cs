@@ -69,7 +69,6 @@ namespace SquareGrid
         {
             switch (input)
             {
-                case Direction.Undefined:
                 case Direction.PositiveY:
                 case Direction.PositiveX:
                 case Direction.NegativeY:
@@ -81,8 +80,8 @@ namespace SquareGrid
                 case Direction.DiagonalNegXPosY: return preferResolveToX ? Direction.NegativeX : Direction.PositiveY;
                 case Direction.DiagonalNegXNegY: return preferResolveToX ? Direction.NegativeX : Direction.NegativeY;
 
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(input), input, null);
+                case Direction.Undefined:
+                default: return Direction.Undefined;
             }
         }
 
@@ -183,9 +182,7 @@ namespace SquareGrid
                 case Direction.DiagonalNegXPosY: return new Coordinate(-1, 1);
 
                 case Direction.Undefined:
-                    return Coordinate.Zero;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(dir), dir, null);
+                default: return Coordinate.Zero;
             }
         }
 
