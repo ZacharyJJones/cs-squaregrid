@@ -92,40 +92,39 @@ namespace SquareGrid
         /// <summary> Returns a set of <see cref="Coordinate"/> structs with their distance from this <see cref="Coordinate"/>, which were reachable given [obstacles]. </summary>
         /// <param name="maxDistance"> The maximum distance to flood-fill away this <see cref="Coordinate"/> before returning the result. </param>
         /// <param name="obstacles"> A set of <see cref="Coordinate"/> structs which are not allowed to be flood-filled to. </param>
-        public Dictionary<Coordinate, int> GetCoordsInDistance(int maxDistance, IEnumerable<Coordinate> obstacles = null) => GetCoordsInDistance(new[] { this }, maxDistance, obstacles);
+        public Dictionary<Coordinate, int> FloodFill(int maxDistance, IEnumerable<Coordinate> obstacles = null) => FloodFill(new[] { this }, maxDistance, obstacles);
 
         /// <summary> Returns a set of <see cref="Coordinate"/> structs with their distance from one of the [input] <see cref="Coordinate"/> structs, which were reachable given [obstacles]. </summary>
-        /// <param name="input"> The starting <see cref="Coordinate"/> values for the flood-fill algorithm. </param>
+        /// <param name="startCoords"> The starting <see cref="Coordinate"/> values for the flood-fill algorithm. </param>
         /// <param name="maxDistance"> The maximum distance to flood-fill away any of the [input] <see cref="Coordinate"/> values before returning the result. </param>
         /// <param name="obstacles"> A set of <see cref="Coordinate"/> structs which are not allowed to be flood-filled to. </param>
-        public static Dictionary<Coordinate, int> GetCoordsInDistance(IEnumerable<Coordinate> input, int maxDistance, IEnumerable<Coordinate> obstacles = null)
+        public static Dictionary<Coordinate, int> FloodFill(IEnumerable<Coordinate> startCoords, int maxDistance, IEnumerable<Coordinate> obstacles = null)
         {
             var obstaclesList = obstacles?.ToList() ?? new List<Coordinate>();
-            var ret = input.ToDictionary(
+            var prev = new List<Coordinate>(startCoords);
+            var ret = prev.ToDictionary(
                 coord => coord,
                 _ => 0
             );
 
-            // flood-filling
             for (int i = 1; i <= maxDistance; i++)
             {
-                var temp = new List<Coordinate>();
-
-                foreach (var pair in ret)
+                var current = new List<Coordinate>();
+                foreach (var coord in prev)
                 {
-                    if (pair.Value != i - 1) continue;
-                    var neighbors = pair.Key.GetAdjacents();
-
-                    foreach (var neighbor in neighbors)
+                    var adjacentCoords = coord.GetAdjacents();
+                    foreach (var candidate in adjacentCoords)
                     {
-                        if (ret.Any(x => x.Key == neighbor)) continue;
-                        if (temp.Any(x => x == neighbor)) continue;
-                        if (obstaclesList.Any(x => x == neighbor)) continue;
+                        if (ret.Any(x => x.Key == candidate)) continue;
+                        if (current.Any(x => x == candidate)) continue;
+                        if (obstaclesList.Any(x => x == candidate)) continue;
 
-                        temp.Add(neighbor);
-                        ret.Add(neighbor, i);
+                        current.Add(candidate);
+                        ret.Add(candidate, i);
                     }
                 }
+
+                prev = current;
             }
 
             return ret;
@@ -136,11 +135,12 @@ namespace SquareGrid
         public IEnumerable<Coordinate> GetLineToPoint(Coordinate endpoint)
         {
             int length = GetDistanceTo_Diagonal(endpoint);
+            float step = 1.0f / Math.Max(length, 1);
 
             var ret = new List<Coordinate> { this };
             for (int i = 1; i <= length; i++)
             {
-                float t = (float)i / length;
+                float t = step * i;
                 ret.Add(Lerp(this, endpoint, t));
             }
 
