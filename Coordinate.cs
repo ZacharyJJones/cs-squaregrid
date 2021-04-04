@@ -295,6 +295,9 @@ namespace SquareGrid
         /// <param name="b"> The second of the two <see cref="Coordinate"/> structs to be compared to each other. </param>
         public static bool operator !=(Coordinate a, Coordinate b) => (a.X != b.X) || (a.Y != b.Y);
 
+        /// <summary> Implicit conversion from a <see cref="Tuple"/>&lt;<see cref="int"/>, <see cref="int"/>&gt; to a <see cref="Coordinate"/>. </summary>
+        /// <param name="tuple"> The <see cref="Tuple"/> to implicitly convert to a <see cref="Coordinate"/>. </param>
+        public static implicit operator Coordinate((int X, int Y) tuple) => new Coordinate(tuple.X, tuple.Y);
 
         /// <summary> Returns a <see cref="string"/> representation of this <see cref="Coordinate"/> struct. </summary>
         public override string ToString() => $"({X}, {Y})";
