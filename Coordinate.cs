@@ -90,7 +90,7 @@ namespace SquareGrid
         /// <summary> Returns a set of <see cref="Coordinate"/> structs with their distance from this <see cref="Coordinate"/>, which were reachable given [obstacles]. </summary>
         /// <param name="maxDistance"> The maximum distance to flood-fill away this <see cref="Coordinate"/> before returning the result. </param>
         /// <param name="obstacles"> A set of <see cref="Coordinate"/> structs which are not allowed to be flood-filled to. </param>
-        public Dictionary<Coordinate, int> GetCoordsInDistance(int maxDistance, IEnumerable<Coordinate> obstacles = null) => GetCoordsInDistance(new[] {this}, maxDistance, obstacles);
+        public Dictionary<Coordinate, int> GetCoordsInDistance(int maxDistance, IEnumerable<Coordinate> obstacles = null) => GetCoordsInDistance(new[] { this }, maxDistance, obstacles);
 
         /// <summary> Returns a set of <see cref="Coordinate"/> structs with their distance from one of the [input] <see cref="Coordinate"/> structs, which were reachable given [obstacles]. </summary>
         /// <param name="input"> The starting <see cref="Coordinate"/> values for the flood-fill algorithm. </param>
@@ -135,10 +135,10 @@ namespace SquareGrid
         {
             int length = GetDistanceTo_Diagonal(endpoint);
 
-            var ret = new List<Coordinate> {this};
+            var ret = new List<Coordinate> { this };
             for (int i = 1; i <= length; i++)
             {
-                float t = (float) i / length;
+                float t = (float)i / length;
                 ret.Add(Lerp(this, endpoint, t));
             }
 
@@ -269,7 +269,7 @@ namespace SquareGrid
         /// <param name="coord"> The <see cref="Coordinate"/> struct to multiply the values of by [t]. </param>
         /// <param name="mult"> The value to multiply the given <see cref="Coordinate"/> struct's values by. </param>
         public static Coordinate operator *(Coordinate coord, float mult) =>
-            new Coordinate((int) Math.Round(mult * coord.X), (int) Math.Round(mult * coord.Y));
+            new Coordinate((int)Math.Round(mult * coord.X), (int)Math.Round(mult * coord.Y));
 
         /// <summary> Returns a new <see cref="Coordinate"/> struct whose values equal the <see cref="Coordinate"/> struct's values multiplied by [t].
         /// <para> Points to the [*] operator which accepts a <see cref="Coordinate"/> as the first parameter and a <see cref="int"/> value as the second. </para></summary>
